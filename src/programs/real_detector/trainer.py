@@ -4,13 +4,13 @@ Test run as follows, but run sweep using sweep.yaml
 
 Train:
 
-CUDA_VISIBLE_DEVICES=0 PYTHONPATH=. python src/programs/real_detector/trainer.py \
+CUDA_VISIBLE_DEVICES=3 PYTHONPATH=. python src/programs/real_detector/trainer.py \
 --data_gen_method gpt2-xl_k40 \
---wandb_group realdetector_v0 \
+--wandb_group realdetector_realnews \
 --model_name bert-base-uncased \
 --batch_size 32 --n_gpus 1 \
 --lr 1e-5 \
---epochs 15 
+--epochs 10
 
 Batch size 32 with length 192
 
