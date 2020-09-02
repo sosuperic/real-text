@@ -13,3 +13,8 @@ REALNEWS_PREPPED_PATH = DATA_PATH / 'realnews' / 'generator=mega~dataset=p0.94.j
 # REALNEWS_PREPPED_PATH = DATA_PATH / 'realnews' / 'prepped/'
 
 ETS_NONNATIVE_PATH = DATA_PATH / 'ets_nonnative/data/text'
+
+
+SCHOOL_REVIEWS_PATH = DATA_PATH / 'school_reviews'
+SCHOOL_REVIEWS_DATA = SCHOOL_REVIEWS_PATH / 'Parent_gs_comments_by_school_with_covars.csv'
+SCHOOL_REVIEWS_TRAINGPT2_PATH = SCHOOL_REVIEWS_PATH / 'train_gpt2'
