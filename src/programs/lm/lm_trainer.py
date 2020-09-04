@@ -5,11 +5,13 @@ Usage:
 
 Train on school reviews:
 WANDB_DIR=/u/echu/projects/research/real-text/trained_models/school_reviews/gpt2 \
+WANDB_PROJECT=real-text-school-reviews \
+WANDB_NAME=gpt2-small-TESTING-LINGO \
 CUDA_VISIBLE_DEVICES=5 PYTHONPATH=. python src/programs/lm/lm_trainer.py \
 --train_path /u/echu/projects/research/real-text/data/school_reviews/train_gpt2/train/ \
 --val_path /u/echu/projects/research/real-text/data/school_reviews/train_gpt2/valid/ \
 --test_path /u/echu/projects/research/real-text/data/school_reviews/train_gpt2/valid \
---model_name gpt2-xl --batch_size 1 \
+--model_name gpt2-small --batch_size 1 \
 --epochs 10 \
 --wandb_project real-text-school-reviews \
 --wandb_group all_reviews_no_strat
@@ -62,11 +64,11 @@ from transformers import GPT2LMHeadModel, CTRLLMHeadModel, GPT2TokenizerFast, CT
 import wandb
 
 
-from config import ROOT_PATH
+# from config import ROOT_PATH
 # Normally, I run using PYTHONPATH=.
 # with wandb sweep sweep.yaml, couldn't figure out how to set PYTHONPATH. So change dir in order
 # to be able to access data
-os.chdir(ROOT_PATH)
+# os.chdir(ROOT_PATH)
 
 
 MODEL_CLASSES = {
@@ -421,7 +423,8 @@ if __name__ == "__main__":
     model = LM(args)
     trainer = pl.Trainer(max_epochs=args.epochs,
                          accumulate_grad_batches=args.grad_steps, 
-                         gpus=args.n_gpus, num_tpu_cores=args.n_tpu_cores,
+                         gpus=args.n_gpus, 
+                        #  num_tpu_cores=args.n_tpu_cores,
                          precision=args.precision, amp_level=args.apex_mode,
                          resume_from_checkpoint=args.checkpoint,
                          logger=wandb_logger,
