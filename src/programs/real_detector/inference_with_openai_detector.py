@@ -10,11 +10,13 @@ PYTHONPATH=. python src/programs/real_detector/inference_with_openai_detector.py
 --dataset ets \
 --output_dir outputs/openai_detector/ets/
 
-
 ---------------------------
 INFERENCE ON SCHOOL REVIEWS
 ---------------------------
-todo
+PYTHONPATH=. python src/programs/real_detector/inference_with_openai_detector.py \
+--model_name roberta-base \
+--dataset schoolreviews \
+--output_dir outputs/openai_detector/school_reviews/
 """
 
 import argparse
@@ -25,6 +27,8 @@ from transformers import RobertaForSequenceClassification, RobertaTokenizer
 
 from config import OPENAI_DETECTOR_DIR
 from src.programs.real_detector.data_prep.ets.ets_dataset import get_etsnonnative_dataloader
+from src.programs.real_detector.data_prep.school_reviews.school_reviews_inference_dataset import \
+    get_schoolreviewsreal_dataloader
 from src.utils import save_file
 
 
@@ -46,14 +50,20 @@ def inference_on_dataset(args):
     model.cuda()
     if args.dataset == 'ets':
         data_loader = get_etsnonnative_dataloader(
-            skip_tokenization=False,
             max_len=args.max_len,
             batch_size=1)
-        print('Dataset loaded')
+    elif args.dataset == 'schoolreviews':
+        data_loader = get_schoolreviewsreal_dataloader(
+            max_len=args.max_len,
+            batch_size=1)
+    print('Dataset loaded')
     
 
     results = {}
-    for batch in data_loader:
+    for i, batch in enumerate(data_loader):
+        if i % 100 == 0:
+        print('{} / {} / ')
+
         token_ids_padded, atn_mask, label, text, id = batch
         query = text[0]  # bsz 1
         id = id[0]  # bsz 1
@@ -79,7 +89,7 @@ def inference_on_dataset(args):
                 correct = True
             results[id] = {'fake': fake, 'real': real, 'correct': correct}
 
-    save_file(results, os.path.join(args.output_dir, 'ets_results.json'))
+    save_file(results, os.path.join(args.output_dir, 'results.json'), verbose=True)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

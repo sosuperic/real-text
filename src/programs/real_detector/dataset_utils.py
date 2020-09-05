@@ -53,7 +53,8 @@ def get_realgentext_dataloader(dataset_name, split, gen_method, **kwargs):
     elif dataset_name == 'realnews':
         from src.programs.real_detector.data_prep.gpt2.gpt2_dataset import RealNewsRealGeneratedTextDataset as ds
     elif dataset_name == 'school_reviews':
-        pass
+        from src.programs.real_detector.data_prep.school_reviews.school_reviews_detector_dataset import \
+            SchoolReviewsRealGeneratedTextDataset
 
     ds = RealGeneratedTextDataset(split, gen_method)
     loader = DataLoader(ds, **kwargs)
