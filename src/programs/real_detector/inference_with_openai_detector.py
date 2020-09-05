@@ -18,13 +18,14 @@ todo
 """
 
 import argparse
+import os
 from pathlib import Path
 import torch
 from transformers import RobertaForSequenceClassification, RobertaTokenizer
 
 from config import OPENAI_DETECTOR_DIR
 from src.programs.real_detector.data_prep.ets.ets_dataset import get_etsnonnative_dataloader
-
+from src.utils import save_file
 
 
 def load_model(args):
@@ -42,12 +43,20 @@ def load_model(args):
 
 def inference_on_dataset(args):
     model, tokenizer = load_model(args)
+    model.cuda()
     if args.dataset == 'ets':
-        data_loader = get_etsnonnative_dataloader(batch_size=1)
+        data_loader = get_etsnonnative_dataloader(
+            skip_tokenization=False,
+            max_len=args.max_len,
+            batch_size=1)
+        print('Dataset loaded')
     
+
+    results = {}
     for batch in data_loader:
         token_ids_padded, atn_mask, label, text, id = batch
         query = text[0]  # bsz 1
+        id = id[0]  # bsz 1
 
         tokens = tokenizer.encode(query)
         all_tokens = len(tokens)
@@ -57,17 +66,26 @@ def inference_on_dataset(args):
         mask = torch.ones_like(tokens)
 
         with torch.no_grad():
-            logits = model(tokens.to(device), attention_mask=mask.to(device))[0]
+            tokens = tokens.cuda()
+            mask = mask.cuda()
+            logits = model(tokens, attention_mask=mask)[0]
             probs = logits.softmax(dim=-1)
 
             fake, real = probs.detach().cpu().flatten().numpy().tolist()
 
-            breakpoint()
+            correct = False
+            if ((real > fake) and (label == 1)) or \
+                (fake > real) and (label == 0):
+                correct = True
+            results[id] = {'fake': fake, 'real': real, 'correct': correct}
+
+    save_file(results, os.path.join(args.output_dir, 'ets_results.json'))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', default='roberta-base')
     parser.add_argument('--dataset', default='ets')
+    parser.add_argument('--max_len', default=128)
     parser.add_argument('--output_dir', default=None, required=True)
     args = parser.parse_args()
     
