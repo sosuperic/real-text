@@ -6,11 +6,11 @@ Usage:
 import numpy as np
 import pandas as pd
 
-from config import SCHOOL_REVIEWS_DATA, SCHOOL_REVIEWS_TRAINGPT2_PATH
+from config import SCHOOL_REVIEWS_DATA, SCHOOL_REVIEWS_TRAINGPT2_DIR
 
 def save_comments_for_gpt2_training():
     df = pd.read_csv(SCHOOL_REVIEWS_DATA)
-    out_dir = SCHOOL_REVIEWS_TRAINGPT2_PATH
+    out_dir = SCHOOL_REVIEWS_TRAINGPT2_DIR
 
     # get train and valid indices
     all_ind = list(range(0, len(df)))

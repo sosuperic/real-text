@@ -2,6 +2,7 @@
 data/
 lightning_logs/
 wandb/
+outputs/
 
 *__pycache__/
 .vscode/*

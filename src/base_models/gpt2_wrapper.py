@@ -63,7 +63,7 @@ class GPT2Wrapper(nn.Module):
 
     def generate_unconditional(self, n=1, bsz=1, stdout=True):
         prompts=["<|endoftext|> " for _ in range(n)]
-        self.generate_conditional(prompts, stdout)
+        return self.generate_conditional(prompts, stdout)
 
     def generate_conditional(self, prompts, bsz=1, stdout=True):
         """

@@ -1,9 +1,9 @@
 """
-Usage:
-Test run as follows, but run sweep using sweep.yaml
 
-Train:
 
+-----
+TRAIN
+-----
 CUDA_VISIBLE_DEVICES=3 PYTHONPATH=. python src/programs/real_detector/trainer.py \
 --data_gen_method gpt2-xl_k40 \
 --wandb_group realdetector_realnews \
@@ -14,7 +14,9 @@ CUDA_VISIBLE_DEVICES=3 PYTHONPATH=. python src/programs/real_detector/trainer.py
 
 Batch size 32 with length 192
 
-Inference:
+---------
+INFERENCE
+---------
 CUDA_VISIBLE_DEVICES=3 PYTHONPATH=. python src/programs/real_detector/trainer.py \
 --checkpoint wandb/run-20200803_230036-27j3kdrk/epoch=0.ckpt --eval_out_fp evalETS_v0.1.json \
 --batch_size 32 \
@@ -25,7 +27,9 @@ CUDA_VISIBLE_DEVICES=3 PYTHONPATH=. python src/programs/real_detector/trainer.py
 --checkpoint wandb/run-20200803_230036-27j3kdrk/epoch=0.ckpt --eval_out_fp evalETS_v0.1.json \
 --checkpoint wandb/run-20200803_212506-27tjk6r7/epoch=1.ckpt --eval_out_fp evalETS_v0.0.json \
 
-TODO: 
+----
+TODO
+---- 
 - UserWarning: Did not find hyperparameters at model hparams. Saving checkpoint without hyperparameters.
 - MultiGPU
 

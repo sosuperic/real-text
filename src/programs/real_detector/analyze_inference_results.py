@@ -1,5 +1,7 @@
 
 """
+Analyze output of trainer.py --run_eval
+
 PYTHONPATH=. python src/programs/real_detector/analyze.py
 """
 import numpy as np
